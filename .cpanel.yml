@@ -12,8 +12,10 @@ deployment:
     - /bin/echo "===== Deployment started at $(date) =====" >> $LOGFILE
 
     # === Pull latest code ===
-    - /bin/echo "Pulling latest changes from GitHub..." >> $LOGFILE
-    - cd $REPOPATH && /usr/bin/git pull origin main >> $LOGFILE 2>&1
+    # - /bin/echo "Pulling latest changes from GitHub..." >> $LOGFILE
+    - /bin/echo "Resetting local repo to match origin/main..." >> $LOGFILE
+    - cd $REPOPATH && /usr/bin/git fetch origin main >> $LOGFILE 2>&1
+    - cd $REPOPATH && /usr/bin/git reset --hard origin/main >> $LOGFILE 2>&1
 
     # === Sync non-public files to laravel_app (preserve .env, storage, cache) ===
     - /bin/echo "Syncing app files to $LARAVEL_APP_PATH..." >> $LOGFILE
