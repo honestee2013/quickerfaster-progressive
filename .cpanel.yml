@@ -17,16 +17,38 @@ deployment:
     - cd $REPOPATH && /usr/bin/git fetch origin main >> $LOGFILE 2>&1
     - cd $REPOPATH && /usr/bin/git reset --hard origin/main >> $LOGFILE 2>&1
 
+
+
     # === Sync non-public files to laravel_app (preserve .env, storage, cache) ===
-    - /bin/echo "Syncing app files to $LARAVEL_APP_PATH..." >> $LOGFILE
-    - /bin/sh -c 'rsync -av --delete \
-        --exclude=".git" \
-        --exclude=".env" \
-        --exclude=".cpanel.yml" \
-        --exclude="public" \
-        --exclude="storage" \
-        --exclude="bootstrap/cache" \
-        "$REPOPATH/" "$LARAVEL_APP_PATH/" >> "$LOGFILE" 2>&1'
+    # === Sync non-public files to laravel_app (without rsync) ===
+    - /bin/echo "Syncing app files to $LARAVEL_APP_PATH (using cp)..." >> $LOGFILE
+
+    # Create backup directory for protected items
+    - mkdir -p /tmp/laravel_protected_$$
+
+    # Move protected items to temporary location
+    - /bin/sh -c 'if [ -f "$LARAVEL_APP_PATH/.env" ]; then mv "$LARAVEL_APP_PATH/.env" /tmp/laravel_protected_$$/; fi' >> $LOGFILE 2>&1
+    - /bin/sh -c 'if [ -d "$LARAVEL_APP_PATH/storage" ]; then mv "$LARAVEL_APP_PATH/storage" /tmp/laravel_protected_$$/; fi' >> $LOGFILE 2>&1
+    - /bin/sh -c 'if [ -d "$LARAVEL_APP_PATH/bootstrap/cache" ]; then mv "$LARAVEL_APP_PATH/bootstrap/cache" /tmp/laravel_protected_$$/; fi' >> $LOGFILE 2>&1
+
+    # Remove all current app files (except hidden system files like .cpanel.yml if present)
+    - /bin/sh -c 'cd "$LARAVEL_APP_PATH" && find . -maxdepth 1 ! -name "." ! -name ".." ! -name ".cpanel.yml" -exec rm -rf {} + 2>/dev/null || true' >> $LOGFILE 2>&1
+
+    # Copy all new files (except .git, public, and protected items)
+    - /bin/sh -c 'cd "$REPOPATH" && /bin/cp -a $(/bin/ls -A | grep -vE "^\.(git|env|cpanel\.yml)$|^public$") "$LARAVEL_APP_PATH/"' >> $LOGFILE 2>&1
+
+    # Restore protected items
+    - /bin/sh -c 'if [ -f /tmp/laravel_protected_$$/.env ]; then mv /tmp/laravel_protected_$$/.env "$LARAVEL_APP_PATH/"; fi' >> $LOGFILE 2>&1
+    - /bin/sh -c 'if [ -d /tmp/laravel_protected_$$/storage ]; then mv /tmp/laravel_protected_$$/storage "$LARAVEL_APP_PATH/"; fi' >> $LOGFILE 2>&1
+    - /bin/sh -c 'if [ -d /tmp/laravel_protected_$$/cache ]; then mv /tmp/laravel_protected_$$/cache "$LARAVEL_APP_PATH/bootstrap/"; fi' >> $LOGFILE 2>&1
+
+    # Clean up temp
+    - rm -rf /tmp/laravel_protected_$$
+
+
+
+
+
 
     # === Ensure storage & cache dirs exist and are writable ===
     - /bin/echo "Ensuring storage and cache directories exist..." >> $LOGFILE
