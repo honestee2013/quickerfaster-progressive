@@ -81,11 +81,11 @@ deployment:
     - cd $LARAVEL_APP_PATH && ea-php84 artisan view:cache >> $LOGFILE 2>&1
 
     # === Migrations & Seeding (only if needed—comment out later if not) ===
-    - /bin/echo "Running migrations..." >> $LOGFILE
-    - cd $LARAVEL_APP_PATH && ea-php84 artisan migrate --force >> $LOGFILE 2>&1
+    # - /bin/echo "Running migrations..." >> $LOGFILE
+    # - cd $LARAVEL_APP_PATH && ea-php84 artisan migrate --force >> $LOGFILE 2>&1
 
-    - /bin/echo "Seeding database..." >> $LOGFILE
-    - cd $LARAVEL_APP_PATH && ea-php84 artisan db:seed --force >> $LOGFILE 2>&1
+    # - /bin/echo "Seeding database..." >> $LOGFILE
+    # - cd $LARAVEL_APP_PATH && ea-php84 artisan db:seed --force >> $LOGFILE 2>&1
 
     # === Optional: Compile assets (if using Vite or Mix) ===
     # Skip for now since Soft UI may ship pre-built assets.
