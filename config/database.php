@@ -63,6 +63,38 @@ return [
             ]) : [],
         ],
 
+
+
+    // Add this tenant connection
+    'tenant' => [
+        'driver' => 'mysql',
+        'host' => env('DB_HOST', '127.0.0.1'),
+        'port' => env('DB_PORT', '3306'),
+        'database' => null, // Will be set dynamically
+        'username' => env('DB_USERNAME', 'forge'),
+        'password' => env('DB_PASSWORD', ''),
+        'charset' => 'utf8mb4',
+        'collation' => 'utf8mb4_unicode_ci',
+        'prefix' => '',
+        'strict' => true,
+        'engine' => null,
+    ],
+
+
+
+    'tenant_pool' => [
+        'driver' => 'mysql',
+        'host' => env('DB_HOST'),
+        'port' => env('DB_PORT'),
+        'database' => '', // will be set dynamically
+        'username' => env('DB_USERNAME'),
+        'password' => env('DB_PASSWORD'),
+        'charset' => 'utf8mb4',
+        'collation' => 'utf8mb4_unicode_ci',
+    ],
+
+
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
