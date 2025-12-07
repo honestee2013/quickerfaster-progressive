@@ -14,3 +14,7 @@ deployment:
 
 
 
+    # Pull latest changes from GitHub
+    - /bin/echo "Pulling latest changes from GitHub..." >> $LOGFILE
+    - cd $REPOPATH && /usr/bin/git pull origin main >> $LOGFILE 2>&1
+
