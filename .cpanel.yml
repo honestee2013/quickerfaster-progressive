@@ -42,3 +42,13 @@ deployment:
 
 
 
+    # Install Composer locally if missing
+    - /bin/echo "Checking Composer..." >> $LOGFILE
+    - /bin/sh -c 'if [ ! -f "$COMPOSER_BIN" ]; then
+        /bin/echo "Downloading Composer..." >> $LOGFILE &&
+        cd /home/quickerf &&
+        /usr/bin/curl -sS https://getcomposer.org/installer -o composer-setup.php &&
+        ea-php84 composer-setup.php --quiet &&
+        rm composer-setup.php &&
+        /bin/echo "Composer installed successfully" >> $LOGFILE;
+      fi'
