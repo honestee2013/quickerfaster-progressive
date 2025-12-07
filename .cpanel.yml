@@ -11,9 +11,20 @@ deployment:
     # Start log
     - /bin/echo "===== Deployment started at $(date) =====" >> $LOGFILE
 
+
+
+
     # Pull latest changes from GitHub
-    # - /bin/echo "Pulling latest changes from GitHub..." >> $LOGFILE
-    # - cd $REPOPATH && /usr/bin/git pull origin main >> $LOGFILE 2>&1
+    - /bin/echo "Pulling latest changes from GitHub..." >> $LOGFILE
+    - cd $REPOPATH && /usr/bin/git pull origin main >> $LOGFILE 2>&1
+
+
+    # Ensure repo stays clean (remove any accidental untracked files)
+    - /bin/echo "Ensuring repo directory is clean..." >> $LOGFILE
+    - cd $REPOPATH && /usr/bin/git reset --hard HEAD >> $LOGFILE 2>&1
+    - cd $REPOPATH && /usr/bin/git clean -fd >> $LOGFILE 2>&1
+
+
 
     # Clean destination folder but preserve .env, .cpanel.yml, storage, bootstrap/cache
     - /bin/echo "Cleaning destination folder..." >> $LOGFILE
