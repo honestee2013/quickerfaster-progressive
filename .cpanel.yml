@@ -89,7 +89,9 @@ deployment:
     - /bin/sh -c 'cd "$DEPLOYPATH" && ea-php84 artisan view:cache >> "$LOGFILE" 2>&1'
 
 
-
+    # Final cache cleanup
+    - /bin/echo "Clearing caches..." >> $LOGFILE
+    - /bin/sh -c 'ea-php84 "$DEPLOYPATH/artisan" optimize:clear >> "$LOGFILE" 2>&1'
 
 
 
