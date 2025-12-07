@@ -66,13 +66,17 @@ deployment:
 
 
 
-    # Run database migrations and seeders
+    # Run database migrations
     - /bin/echo "Running database migrations..." >> $LOGFILE
     - /bin/sh -c 'cd "$DEPLOYPATH" && ea-php84 artisan migrate --force >> "$LOGFILE" 2>&1 || /bin/echo "Migrations failed, continuing deployment..." >> "$LOGFILE"'
 
 
-    # Run database migrations and seeders
+    # Run database  seeders
     - /bin/echo "Seeding database..." >> $LOGFILE
     - /bin/sh -c 'cd "$DEPLOYPATH" && ea-php84 artisan db:seed --force >> "$LOGFILE" 2>&1 || /bin/echo "Seeding failed, continuing deployment..." >> "$LOGFILE"'
 
 
+    # Cache configurations and optimize
+    - /bin/echo "Caching configurations and optimizing..." >> $LOGFILE
+    - /bin/sh -c 'cd "$DEPLOYPATH" && ea-php84 artisan package:discover >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'cd "$DEPLOYPATH" && ea-php84 artisan config:cache >> "$LOGFILE" 2>&1'
