@@ -66,6 +66,9 @@ deployment:
 
 
 
+    # Run database migrations and seeders
+    - /bin/echo "Running database migrations..." >> $LOGFILE
+    - /bin/sh -c 'cd "$DEPLOYPATH" && ea-php84 artisan migrate --force >> "$LOGFILE" 2>&1 || /bin/echo "Migrations failed, continuing deployment..." >> "$LOGFILE"'
 
 
 
