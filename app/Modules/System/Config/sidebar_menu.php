@@ -34,11 +34,4 @@ return [
     'permission' => 'manage-system',
     'groupTitle' => 'System',
 ],
-    [
-    'title' => 'Databases Pools',
-    'icon' => 'fas fa-cog',
-    'url' => 'system/availabled-databases',
-    'permission' => 'view_available_database',
-    'groupTitle' => 'System',
-],
 ];

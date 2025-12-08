@@ -29,11 +29,4 @@ return [
     'permission' => 'view_subscription',
     'key' => 'subscription',
 ],
-    [
-    'title' => 'Available Databases',
-    'icon' => 'fas fa-cog',
-    'url' => 'system/available-databases',
-    'permission' => 'view_available_database',
-    'key' => 'available_database',
-],
 ];
